@@ -60,6 +60,56 @@ export interface TicketSummaryResponse {
   version: number;
 }
 
+export interface TicketDetailsResponse {
+  id: string;
+  title: string;
+  description: string;
+  priority: TicketPriority;
+  status: TicketStatus;
+  categoryId: string;
+  createdByUserId: string;
+  assignedAgentId: string | null;
+  createdAt: string;
+  firstRespondedAt: string | null;
+  firstResponseDueAt: string;
+  resolutionDueAt: string;
+  resolvedAt: string | null;
+  closedAt: string | null;
+  version: number;
+}
+
+export interface CreateTicketRequest {
+  title: string;
+  description: string;
+  priority: TicketPriority;
+  categoryId: string;
+}
+
+export interface TicketCommentResponse {
+  id: string;
+  authorUserId: string;
+  authorDisplayName: string;
+  body: string;
+  createdAt: string;
+}
+
+export interface CreateTicketCommentRequest {
+  body: string;
+}
+
+export type TicketHistoryEvent =
+  'Created' | 'Assigned' | 'StatusChanged' | 'PriorityChanged' | 'CategoryChanged';
+
+export interface TicketHistoryResponse {
+  id: string;
+  actorUserId: string;
+  actorDisplayName: string;
+  eventType: TicketHistoryEvent;
+  occurredAt: string;
+  previousValue: string | null;
+  newValue: string | null;
+}
+
 /** application/problem+json — RFC 7807, retornado pelo ApiExceptionHandler. */
 export interface ProblemDetails {
   type?: string;

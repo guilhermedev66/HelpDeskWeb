@@ -1,0 +1,105 @@
+.page {
+  display: flex;
+  justify-content: center;
+}
+
+.card {
+  width: 100%;
+  max-width: 640px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  padding: var(--spacing-lg);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+}
+
+.heading h1 {
+  font-size: var(--type-h1-size);
+  font-weight: var(--type-h1-weight);
+  color: var(--text-primary);
+}
+
+.heading p {
+  font-size: var(--type-body-sm-size);
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field label {
+  font-size: var(--type-body-sm-size);
+  font-weight: var(--type-body-medium-weight);
+  color: var(--text-primary);
+}
+
+.textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 9px var(--spacing-sm);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  font-size: var(--type-body-size);
+  font-family: var(--font-family-base);
+  color: var(--text-primary);
+  resize: vertical;
+}
+
+.textarea[aria-invalid='true'] {
+  border-color: var(--danger-default);
+}
+
+.select {
+  padding: 9px var(--spacing-sm);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  font-size: var(--type-body-size);
+  color: var(--text-primary);
+}
+
+.select[aria-invalid='true'] {
+  border-color: var(--danger-default);
+}
+
+.errorMessage {
+  font-size: var(--type-caption-size);
+  color: var(--danger-default);
+}
+
+.row {
+  display: flex;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+.row > * {
+  flex: 1 1 200px;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-sm);
+}
+
+.formError {
+  font-size: var(--type-body-sm-size);
+  color: var(--danger-default);
+  background: var(--danger-subtle);
+  border-radius: var(--radius-sm);
+  padding: var(--spacing-xs) var(--spacing-sm);
+}

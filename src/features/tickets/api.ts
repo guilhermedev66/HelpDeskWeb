@@ -1,7 +1,9 @@
 import { apiRequest } from '../../lib/httpClient';
 import type {
   CategoryResponse,
+  CreateTicketRequest,
   PagedResponse,
+  TicketDetailsResponse,
   TicketPriority,
   TicketStatus,
   TicketSummaryResponse,
@@ -33,4 +35,8 @@ export function listTickets(params: TicketListParams): Promise<PagedResponse<Tic
 
 export function listCategories(): Promise<CategoryResponse[]> {
   return apiRequest<CategoryResponse[]>('/categories');
+}
+
+export function createTicket(request: CreateTicketRequest): Promise<TicketDetailsResponse> {
+  return apiRequest<TicketDetailsResponse>('/tickets', { method: 'POST', body: request });
 }

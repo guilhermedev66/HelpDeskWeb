@@ -140,6 +140,35 @@ export const handlers = [
 
   http.get('/api/tickets', ({ request }) => paginatedTicketsHandler(request)),
   http.get('/api/categories', () => HttpResponse.json(CATEGORY_FIXTURES)),
+
+  http.post('/api/tickets', async ({ request }) => {
+    const body = (await request.json()) as {
+      title: string;
+      description: string;
+      priority: string;
+      categoryId: string;
+    };
+    return HttpResponse.json(
+      {
+        id: '30000000-0000-0000-0000-000000000001',
+        title: body.title,
+        description: body.description,
+        priority: body.priority,
+        status: 'Open',
+        categoryId: body.categoryId,
+        createdByUserId: AUTH_USER.id,
+        assignedAgentId: null,
+        createdAt: new Date().toISOString(),
+        firstRespondedAt: null,
+        firstResponseDueAt: new Date(Date.now() + 8 * 60 * 60 * 1000).toISOString(),
+        resolutionDueAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+        resolvedAt: null,
+        closedAt: null,
+        version: 1,
+      },
+      { status: 201 },
+    );
+  }),
 ];
 
 export const server = setupServer(...handlers);
