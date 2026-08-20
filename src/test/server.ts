@@ -1,5 +1,6 @@
 import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
+import type { CategoryResponse, TicketSummaryResponse } from '../types/api';
 
 export const VALID_CREDENTIALS = { email: 'agente@helpdesk.com', password: 'senha-super-secreta' };
 export const EXISTING_EMAIL = 'ja-cadastrado@helpdesk.com';
@@ -10,6 +11,84 @@ export const AUTH_USER = {
   displayName: 'Marina Alves',
   roles: ['Agent'],
 };
+
+export const CATEGORY_FIXTURES: CategoryResponse[] = [
+  { id: 'aaaaaaaa-0000-0000-0000-000000000001', name: 'Hardware' },
+  { id: 'aaaaaaaa-0000-0000-0000-000000000002', name: 'Rede' },
+  { id: 'aaaaaaaa-0000-0000-0000-000000000003', name: 'Acessos' },
+];
+
+export const TICKET_FIXTURES: TicketSummaryResponse[] = [
+  {
+    id: '10000000-0000-0000-0000-000000000001',
+    title: 'Impressora do 3º andar não imprime',
+    priority: 'High',
+    status: 'InProgress',
+    categoryId: CATEGORY_FIXTURES[0].id,
+    createdByUserId: '99999999-0000-0000-0000-000000000001',
+    assignedAgentId: AUTH_USER.id,
+    createdAt: '2026-08-18T09:00:00.000Z',
+    firstResponseDueAt: '2026-08-18T13:00:00.000Z',
+    resolutionDueAt: '2026-08-18T21:00:00.000Z',
+    version: 3,
+  },
+  {
+    id: '10000000-0000-0000-0000-000000000002',
+    title: 'Erro ao acessar VPN pelo notebook',
+    priority: 'Critical',
+    status: 'Open',
+    categoryId: CATEGORY_FIXTURES[1].id,
+    createdByUserId: '99999999-0000-0000-0000-000000000002',
+    assignedAgentId: null,
+    createdAt: '2026-08-19T08:00:00.000Z',
+    firstResponseDueAt: '2026-08-19T09:00:00.000Z',
+    resolutionDueAt: '2026-08-19T12:00:00.000Z',
+    version: 1,
+  },
+  {
+    id: '10000000-0000-0000-0000-000000000003',
+    title: 'Solicitação de acesso ao sistema financeiro',
+    priority: 'Medium',
+    status: 'WaitingForUser',
+    categoryId: CATEGORY_FIXTURES[2].id,
+    createdByUserId: '99999999-0000-0000-0000-000000000001',
+    assignedAgentId: AUTH_USER.id,
+    createdAt: '2026-08-17T10:00:00.000Z',
+    firstResponseDueAt: '2026-08-17T18:00:00.000Z',
+    resolutionDueAt: '2026-08-18T10:00:00.000Z',
+    version: 2,
+  },
+];
+
+function paginatedTicketsHandler(request: Request) {
+  const url = new URL(request.url);
+  let items = TICKET_FIXTURES;
+
+  const status = url.searchParams.get('status');
+  if (status) items = items.filter((ticket) => ticket.status === status);
+
+  const priority = url.searchParams.get('priority');
+  if (priority) items = items.filter((ticket) => ticket.priority === priority);
+
+  const categoryId = url.searchParams.get('categoryId');
+  if (categoryId) items = items.filter((ticket) => ticket.categoryId === categoryId);
+
+  const search = url.searchParams.get('search');
+  if (search) items = items.filter((ticket) => ticket.title.toLowerCase().includes(search.toLowerCase()));
+
+  const page = Number(url.searchParams.get('page') ?? '1');
+  const pageSize = Number(url.searchParams.get('pageSize') ?? '20');
+  const start = (page - 1) * pageSize;
+  const pageItems = items.slice(start, start + pageSize);
+
+  return HttpResponse.json({
+    items: pageItems,
+    page,
+    pageSize,
+    totalItems: items.length,
+    totalPages: Math.max(1, Math.ceil(items.length / pageSize)),
+  });
+}
 
 export const handlers = [
   http.post('/api/auth/login', async ({ request }) => {
@@ -58,6 +137,9 @@ export const handlers = [
       { status: 201 },
     );
   }),
+
+  http.get('/api/tickets', ({ request }) => paginatedTicketsHandler(request)),
+  http.get('/api/categories', () => HttpResponse.json(CATEGORY_FIXTURES)),
 ];
 
 export const server = setupServer(...handlers);

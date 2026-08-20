@@ -29,6 +29,37 @@ export interface RegisterRequest {
   password: string;
 }
 
+// Enums serializados como string pelo back-end (JsonStringEnumConverter, ver Program.cs).
+export type TicketStatus = 'Open' | 'InProgress' | 'WaitingForUser' | 'Resolved' | 'Closed';
+export type TicketPriority = 'Low' | 'Medium' | 'High' | 'Critical';
+
+export interface PagedResponse<T> {
+  items: T[];
+  page: number;
+  pageSize: number;
+  totalItems: number;
+  totalPages: number;
+}
+
+export interface CategoryResponse {
+  id: string;
+  name: string;
+}
+
+export interface TicketSummaryResponse {
+  id: string;
+  title: string;
+  priority: TicketPriority;
+  status: TicketStatus;
+  categoryId: string;
+  createdByUserId: string;
+  assignedAgentId: string | null;
+  createdAt: string;
+  firstResponseDueAt: string;
+  resolutionDueAt: string;
+  version: number;
+}
+
 /** application/problem+json — RFC 7807, retornado pelo ApiExceptionHandler. */
 export interface ProblemDetails {
   type?: string;

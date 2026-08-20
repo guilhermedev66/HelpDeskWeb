@@ -24,7 +24,7 @@ describe('LoginPage', () => {
     await user.type(screen.getByLabelText('Senha'), VALID_CREDENTIALS.password);
     await user.click(screen.getByRole('button', { name: 'Entrar' }));
 
-    expect(await screen.findByText('Bem-vindo(a) de volta.')).toBeInTheDocument();
+    expect(await screen.findByText('Novo chamado')).toBeInTheDocument();
   });
 
   it('exibe mensagem da API para credenciais inválidas (401)', async () => {

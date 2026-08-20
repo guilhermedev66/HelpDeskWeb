@@ -50,7 +50,7 @@ describe('RegisterPage', () => {
     await fillForm(user);
     await user.click(screen.getByRole('button', { name: 'Criar conta' }));
 
-    expect(await screen.findByText('Bem-vindo(a) de volta.')).toBeInTheDocument();
+    expect(await screen.findByText('Novo chamado')).toBeInTheDocument();
     expect(localStorage.getItem('helpdesk.accessToken')).toBe('fake-jwt-token');
   });
 

@@ -3,7 +3,7 @@ import { NavItem } from '../components/NavItem/NavItem';
 import { useAuth } from '../features/auth/useAuth';
 import styles from './AuthenticatedLayout.module.css';
 
-const NAV_LINKS = [{ to: '/', label: 'Chamados', end: true }];
+const NAV_LINKS = [{ to: '/tickets', label: 'Chamados', end: false }];
 
 export function AuthenticatedLayout() {
   const { user, logout } = useAuth();

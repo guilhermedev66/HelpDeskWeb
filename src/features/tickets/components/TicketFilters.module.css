@@ -1,0 +1,59 @@
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.searchField {
+  flex: 1 1 240px;
+  min-width: 160px;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 8px var(--spacing-sm);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  font-size: var(--type-body-sm-size);
+  color: var(--text-primary);
+}
+
+.searchInput::placeholder {
+  color: var(--text-tertiary);
+}
+
+.searchInput:focus-visible {
+  outline: none;
+  border-color: var(--border-focus);
+  border-width: 2px;
+  padding: 7px calc(var(--spacing-sm) - 1px);
+}
+
+.select {
+  padding: 8px var(--spacing-sm);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  font-size: var(--type-body-sm-size);
+  color: var(--text-primary);
+  min-width: 140px;
+}
+
+.clearButton {
+  background: none;
+  border: none;
+  padding: var(--spacing-2xs) var(--spacing-xs);
+  font-size: var(--type-body-sm-size);
+  color: var(--text-link);
+}
+
+.srOnlyLabel {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}

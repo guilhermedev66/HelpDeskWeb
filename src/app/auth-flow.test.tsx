@@ -1,4 +1,4 @@
-import { act, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { http, HttpResponse } from 'msw';
 import { describe, expect, it } from 'vitest';
@@ -22,7 +22,7 @@ describe('proteção de rota e sessão', () => {
     seedValidSession();
     renderApp(['/']);
 
-    expect(await screen.findByText('Bem-vindo(a) de volta.')).toBeInTheDocument();
+    expect(await screen.findByText('Novo chamado')).toBeInTheDocument();
     expect(screen.getByText(AUTH_USER.displayName)).toBeInTheDocument();
   });
 
@@ -41,7 +41,7 @@ describe('proteção de rota e sessão', () => {
     const user = userEvent.setup();
     renderApp(['/']);
 
-    await screen.findByText('Bem-vindo(a) de volta.');
+    await screen.findByText('Novo chamado');
     await user.click(screen.getByRole('button', { name: 'Sair' }));
 
     expect(await screen.findByText('Help Desk')).toBeInTheDocument();
@@ -83,27 +83,21 @@ describe('proteção de rota e sessão', () => {
     server.use(http.get('/api/auth/me', () => HttpResponse.json(AUTH_USER)));
     await user.click(screen.getByRole('button', { name: 'Tentar novamente' }));
 
-    expect(await screen.findByText('Bem-vindo(a) de volta.')).toBeInTheDocument();
+    expect(await screen.findByText('Novo chamado')).toBeInTheDocument();
     expect(localStorage.getItem('helpdesk.accessToken')).toBe('fake-jwt-token');
   });
 
   it('encerra a sessão automaticamente quando uma chamada autenticada recebe 401', async () => {
     seedValidSession();
-    renderApp(['/']);
-    await screen.findByText('Bem-vindo(a) de volta.');
-
     server.use(
       http.get('/api/tickets', () =>
         HttpResponse.json({ status: 401, title: 'Unauthorized' }, { status: 401 }),
       ),
     );
 
-    const { apiRequest } = await import('../lib/httpClient');
-    await act(async () => {
-      await expect(apiRequest('/tickets')).rejects.toThrow();
-    });
+    renderApp(['/']);
 
-    expect(await screen.findByText('Help Desk')).toBeInTheDocument();
+    expect(await screen.findByLabelText('E-mail')).toBeInTheDocument();
     expect(localStorage.getItem('helpdesk.accessToken')).toBeNull();
   });
 });

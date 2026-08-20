@@ -1,0 +1,70 @@
+.wrap {
+  display: none;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .wrap {
+    display: block;
+  }
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th {
+  text-align: left;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--bg-sunken);
+  font-size: var(--type-label-size);
+  font-weight: var(--type-label-weight);
+  color: var(--text-tertiary);
+}
+
+.table td {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-top: 1px solid var(--border-subtle);
+  font-size: var(--type-body-sm-size);
+  vertical-align: middle;
+}
+
+.titleCell {
+  font-size: var(--type-body-size);
+  font-weight: var(--type-body-medium-weight);
+  color: var(--text-primary);
+}
+
+.titleLink {
+  color: inherit;
+  text-decoration: none;
+}
+
+.titleLink:hover,
+.titleLink:focus-visible {
+  text-decoration: underline;
+}
+
+.idCell {
+  color: var(--text-tertiary);
+  font-variant-numeric: tabular-nums;
+}
+
+.secondary {
+  color: var(--text-secondary);
+}
+
+/* Categoria e Responsável só cabem a partir do desktop — no tablet a tabela fica só com o essencial. */
+.desktopOnly {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .desktopOnly {
+    display: table-cell;
+  }
+}
