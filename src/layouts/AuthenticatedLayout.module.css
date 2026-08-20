@@ -3,6 +3,22 @@
   display: flex;
 }
 
+.skipLink {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 1000;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--accent-default);
+  color: var(--text-on-accent);
+  border-radius: var(--radius-sm);
+}
+
+.skipLink:focus {
+  left: var(--spacing-sm);
+  top: var(--spacing-sm);
+}
+
 /* ---------- Sidebar completa (desktop, >=1024px) ---------- */
 .sidebarFull {
   display: none;

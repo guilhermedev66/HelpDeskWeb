@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
 import { NavItem } from '../components/NavItem/NavItem';
 import { useAuth } from '../features/auth/useAuth';
@@ -24,9 +25,20 @@ export function AuthenticatedLayout() {
   const location = useLocation();
   const navLinks = navLinksForRoles(user?.roles);
   const pageTitle = location.pathname.startsWith('/admin/categories') ? 'Categorias' : 'Chamados';
+  const mainRef = useRef<HTMLElement>(null);
+
+  // SPA: trocar de rota não move o foco sozinho (diferente de navegação de página inteira).
+  // Sem isso, leitor de tela e teclado ficam "presos" no link que disparou a navegação.
+  useEffect(() => {
+    mainRef.current?.focus();
+  }, [location.pathname]);
 
   return (
     <div className={styles.shell}>
+      <a href="#main-content" className={styles.skipLink}>
+        Pular para o conteúdo principal
+      </a>
+
       <nav className={styles.sidebarFull} aria-label="Navegação principal">
         <span className={styles.brand}>Help Desk</span>
         {navLinks.map((link) => (
@@ -56,7 +68,7 @@ export function AuthenticatedLayout() {
           </div>
         </header>
 
-        <main className={styles.content}>
+        <main id="main-content" className={styles.content} tabIndex={-1} ref={mainRef}>
           <Outlet />
         </main>
 
