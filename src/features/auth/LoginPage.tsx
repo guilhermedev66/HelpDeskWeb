@@ -86,7 +86,7 @@ export function LoginPage() {
         </form>
 
         <p className={styles.footer}>
-          Ainda não tem conta? <Link to="/register">Criar conta</Link>
+          Ainda não tem conta? <Link to={`/register${location.search}`}>Criar conta</Link>
         </p>
       </div>
     </div>

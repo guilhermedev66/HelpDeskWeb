@@ -23,6 +23,12 @@ export interface LoginRequest {
   password: string;
 }
 
+export interface RegisterRequest {
+  email: string;
+  displayName: string;
+  password: string;
+}
+
 /** application/problem+json — RFC 7807, retornado pelo ApiExceptionHandler. */
 export interface ProblemDetails {
   type?: string;

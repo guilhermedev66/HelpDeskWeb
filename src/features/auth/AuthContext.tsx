@@ -1,6 +1,6 @@
 import { createContext, useCallback, useEffect, useMemo, useState, type ReactNode } from 'react';
-import type { AuthenticatedUserResponse } from '../../types/api';
-import { fetchCurrentUser, login as loginRequest } from './api';
+import type { AuthenticatedUserResponse, AuthenticationResponse } from '../../types/api';
+import { fetchCurrentUser, login as loginRequest, register as registerRequest } from './api';
 import { clearSession, readSession, saveSession } from '../../lib/tokenStorage';
 import { onUnauthorized } from '../../lib/authEvents';
 import { ApiError } from '../../lib/httpClient';
@@ -16,6 +16,7 @@ interface AuthContextValue {
   status: AuthStatus;
   user: AuthenticatedUserResponse | null;
   login: (email: string, password: string) => Promise<void>;
+  registerAccount: (email: string, displayName: string, password: string) => Promise<void>;
   logout: () => void;
   retry: () => void;
 }
@@ -60,12 +61,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     [],
   );
 
-  const login = useCallback(async (email: string, password: string) => {
-    const response = await loginRequest({ email, password });
+  const applySession = useCallback((response: AuthenticationResponse) => {
     saveSession({ accessToken: response.accessToken, expiresAt: response.expiresAt });
     setUser(response.user);
     setStatus('authenticated');
   }, []);
+
+  const login = useCallback(
+    async (email: string, password: string) => {
+      applySession(await loginRequest({ email, password }));
+    },
+    [applySession],
+  );
+
+  const registerAccount = useCallback(
+    async (email: string, displayName: string, password: string) => {
+      applySession(await registerRequest({ email, displayName, password }));
+    },
+    [applySession],
+  );
 
   const logout = useCallback(() => {
     clearSession();
@@ -82,7 +96,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     void verifySession();
   }, [verifySession]);
 
-  const value = useMemo(() => ({ status, user, login, logout, retry }), [status, user, login, logout, retry]);
+  const value = useMemo(
+    () => ({ status, user, login, registerAccount, logout, retry }),
+    [status, user, login, registerAccount, logout, retry],
+  );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
