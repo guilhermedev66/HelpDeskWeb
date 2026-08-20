@@ -49,7 +49,7 @@ describe('NewTicketPage', () => {
     await fillValidForm(user);
     await user.click(screen.getByRole('button', { name: 'Criar chamado' }));
 
-    expect(await screen.findByText('Chamado 30000000-0000-0000-0000-000000000001')).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: 'Impressora não liga' })).toBeInTheDocument();
   });
 
   it('mostra erro de regra de negócio (400 sem fieldErrors) como mensagem geral', async () => {

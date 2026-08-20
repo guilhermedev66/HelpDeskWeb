@@ -1,0 +1,33 @@
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.entry {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.actor {
+  font-size: var(--type-caption-size);
+  font-weight: var(--type-body-medium-weight);
+  color: var(--text-primary);
+}
+
+.date {
+  font-size: 11px;
+  color: var(--text-tertiary);
+}
+
+.description {
+  font-size: var(--type-caption-size);
+  color: var(--text-secondary);
+}

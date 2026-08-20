@@ -1,6 +1,12 @@
 import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
-import type { CategoryResponse, TicketSummaryResponse } from '../types/api';
+import type {
+  CategoryResponse,
+  TicketCommentResponse,
+  TicketDetailsResponse,
+  TicketHistoryResponse,
+  TicketSummaryResponse,
+} from '../types/api';
 
 export const VALID_CREDENTIALS = { email: 'agente@helpdesk.com', password: 'senha-super-secreta' };
 export const EXISTING_EMAIL = 'ja-cadastrado@helpdesk.com';
@@ -57,6 +63,41 @@ export const TICKET_FIXTURES: TicketSummaryResponse[] = [
     firstResponseDueAt: '2026-08-17T18:00:00.000Z',
     resolutionDueAt: '2026-08-18T10:00:00.000Z',
     version: 2,
+  },
+];
+
+const TICKET_DETAILS_BY_ID = new Map<string, TicketDetailsResponse>(
+  TICKET_FIXTURES.map((ticket) => [
+    ticket.id,
+    {
+      ...ticket,
+      description: `Descrição de teste para "${ticket.title}".`,
+      firstRespondedAt: null,
+      resolvedAt: null,
+      closedAt: null,
+    },
+  ]),
+);
+
+export const COMMENT_FIXTURES: TicketCommentResponse[] = [
+  {
+    id: 'c1',
+    authorUserId: AUTH_USER.id,
+    authorDisplayName: AUTH_USER.displayName,
+    body: 'Recebido, vou verificar.',
+    createdAt: '2026-08-18T10:00:00.000Z',
+  },
+];
+
+export const HISTORY_FIXTURES: TicketHistoryResponse[] = [
+  {
+    id: 'h1',
+    actorUserId: '99999999-0000-0000-0000-000000000001',
+    actorDisplayName: 'Carlos Andrade',
+    eventType: 'Created',
+    occurredAt: '2026-08-18T09:00:00.000Z',
+    previousValue: null,
+    newValue: 'Open',
   },
 ];
 
@@ -145,29 +186,60 @@ export const handlers = [
     const body = (await request.json()) as {
       title: string;
       description: string;
-      priority: string;
+      priority: TicketDetailsResponse['priority'];
       categoryId: string;
     };
-    return HttpResponse.json(
-      {
-        id: '30000000-0000-0000-0000-000000000001',
-        title: body.title,
-        description: body.description,
-        priority: body.priority,
-        status: 'Open',
-        categoryId: body.categoryId,
-        createdByUserId: AUTH_USER.id,
-        assignedAgentId: null,
-        createdAt: new Date().toISOString(),
-        firstRespondedAt: null,
-        firstResponseDueAt: new Date(Date.now() + 8 * 60 * 60 * 1000).toISOString(),
-        resolutionDueAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
-        resolvedAt: null,
-        closedAt: null,
-        version: 1,
-      },
-      { status: 201 },
-    );
+    const created: TicketDetailsResponse = {
+      id: '30000000-0000-0000-0000-000000000001',
+      title: body.title,
+      description: body.description,
+      priority: body.priority,
+      status: 'Open',
+      categoryId: body.categoryId,
+      createdByUserId: AUTH_USER.id,
+      assignedAgentId: null,
+      createdAt: new Date().toISOString(),
+      firstRespondedAt: null,
+      firstResponseDueAt: new Date(Date.now() + 8 * 60 * 60 * 1000).toISOString(),
+      resolutionDueAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+      resolvedAt: null,
+      closedAt: null,
+      version: 1,
+    };
+    TICKET_DETAILS_BY_ID.set(created.id, created);
+    return HttpResponse.json(created, { status: 201 });
+  }),
+
+  http.get('/api/tickets/:ticketId', ({ params }) => {
+    const ticket = TICKET_DETAILS_BY_ID.get(params.ticketId as string);
+    if (!ticket) return HttpResponse.json({ status: 404, title: 'Resource not found.' }, { status: 404 });
+    return HttpResponse.json(ticket);
+  }),
+
+  http.get('/api/tickets/:ticketId/comments', ({ params }) => {
+    if (!TICKET_DETAILS_BY_ID.has(params.ticketId as string)) {
+      return HttpResponse.json({ status: 404, title: 'Resource not found.' }, { status: 404 });
+    }
+    return HttpResponse.json(COMMENT_FIXTURES);
+  }),
+
+  http.post('/api/tickets/:ticketId/comments', async ({ request }) => {
+    const body = (await request.json()) as { body: string };
+    const comment: TicketCommentResponse = {
+      id: `c-${Date.now()}`,
+      authorUserId: AUTH_USER.id,
+      authorDisplayName: AUTH_USER.displayName,
+      body: body.body,
+      createdAt: new Date().toISOString(),
+    };
+    return HttpResponse.json(comment, { status: 201 });
+  }),
+
+  http.get('/api/tickets/:ticketId/history', ({ params }) => {
+    if (!TICKET_DETAILS_BY_ID.has(params.ticketId as string)) {
+      return HttpResponse.json({ status: 404, title: 'Resource not found.' }, { status: 404 });
+    }
+    return HttpResponse.json(HISTORY_FIXTURES);
   }),
 ];
 

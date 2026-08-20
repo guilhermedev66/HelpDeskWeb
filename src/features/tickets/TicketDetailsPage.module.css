@@ -1,0 +1,162 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.breadcrumb {
+  font-size: var(--type-body-sm-size);
+  color: var(--text-tertiary);
+}
+
+.breadcrumb a {
+  color: var(--text-link);
+}
+
+.layout {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+@media (min-width: 1024px) {
+  .layout {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .left {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .right {
+    flex: 0 0 320px;
+  }
+}
+
+.left,
+.right {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.card {
+  padding: var(--spacing-lg);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+}
+
+.headerTop {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+}
+
+.headerId {
+  font-size: var(--type-body-sm-size);
+  color: var(--text-tertiary);
+  font-variant-numeric: tabular-nums;
+}
+
+.title {
+  font-size: var(--type-h1-size);
+  font-weight: var(--type-h1-weight);
+  color: var(--text-primary);
+  flex: 1 1 auto;
+  min-width: 200px;
+}
+
+.badgeRow {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-sm);
+  flex-wrap: wrap;
+  font-size: var(--type-body-sm-size);
+  color: var(--text-secondary);
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid var(--border-subtle);
+  margin: var(--spacing-md) 0;
+}
+
+.metaGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--spacing-md);
+}
+
+@media (min-width: 640px) {
+  .metaGrid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.metaItem {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.metaLabel {
+  font-size: 11px;
+  color: var(--text-tertiary);
+}
+
+.metaValue {
+  font-size: var(--type-body-sm-size);
+  font-weight: var(--type-body-medium-weight);
+  color: var(--text-primary);
+}
+
+.sectionTitle {
+  font-size: var(--type-h3-size);
+  font-weight: var(--type-h2-weight);
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-sm);
+}
+
+.description {
+  font-size: var(--type-body-size);
+  color: var(--text-secondary);
+  white-space: pre-wrap;
+}
+
+.slaRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+  font-size: var(--type-body-sm-size);
+  padding: var(--spacing-2xs) 0;
+}
+
+.slaLabel {
+  color: var(--text-secondary);
+}
+
+.errorBox {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-lg);
+  background: var(--danger-subtle);
+  border-radius: var(--radius-md);
+  color: var(--danger-default);
+}
+
+.spacedTop {
+  margin-top: var(--spacing-md);
+}
+
+.notice {
+  font-size: var(--type-body-sm-size);
+  color: var(--text-tertiary);
+}

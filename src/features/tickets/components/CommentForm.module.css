@@ -1,0 +1,37 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.textarea {
+  width: 100%;
+  min-height: 80px;
+  padding: 9px var(--spacing-sm);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  font-size: var(--type-body-sm-size);
+  font-family: var(--font-family-base);
+  color: var(--text-primary);
+  resize: vertical;
+}
+
+.textarea[aria-invalid='true'] {
+  border-color: var(--danger-default);
+}
+
+.errorMessage {
+  font-size: var(--type-caption-size);
+  color: var(--danger-default);
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.notice {
+  font-size: var(--type-body-sm-size);
+  color: var(--text-tertiary);
+}

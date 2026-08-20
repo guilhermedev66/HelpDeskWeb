@@ -12,3 +12,13 @@ export const createTicketSchema = z.object({
 });
 
 export type CreateTicketFormValues = z.infer<typeof createTicketSchema>;
+
+// Limites espelham CreateTicketCommentRequest.
+export const commentSchema = z.object({
+  body: z
+    .string()
+    .min(1, 'Escreva um comentário.')
+    .max(4000, 'Comentário deve ter no máximo 4000 caracteres.'),
+});
+
+export type CommentFormValues = z.infer<typeof commentSchema>;

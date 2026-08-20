@@ -1,9 +1,12 @@
 import { apiRequest } from '../../lib/httpClient';
 import type {
   CategoryResponse,
+  CreateTicketCommentRequest,
   CreateTicketRequest,
   PagedResponse,
+  TicketCommentResponse,
   TicketDetailsResponse,
+  TicketHistoryResponse,
   TicketPriority,
   TicketStatus,
   TicketSummaryResponse,
@@ -39,4 +42,26 @@ export function listCategories(): Promise<CategoryResponse[]> {
 
 export function createTicket(request: CreateTicketRequest): Promise<TicketDetailsResponse> {
   return apiRequest<TicketDetailsResponse>('/tickets', { method: 'POST', body: request });
+}
+
+export function getTicket(ticketId: string): Promise<TicketDetailsResponse> {
+  return apiRequest<TicketDetailsResponse>(`/tickets/${ticketId}`);
+}
+
+export function listTicketComments(ticketId: string): Promise<TicketCommentResponse[]> {
+  return apiRequest<TicketCommentResponse[]>(`/tickets/${ticketId}/comments`);
+}
+
+export function addTicketComment(
+  ticketId: string,
+  request: CreateTicketCommentRequest,
+): Promise<TicketCommentResponse> {
+  return apiRequest<TicketCommentResponse>(`/tickets/${ticketId}/comments`, {
+    method: 'POST',
+    body: request,
+  });
+}
+
+export function listTicketHistory(ticketId: string): Promise<TicketHistoryResponse[]> {
+  return apiRequest<TicketHistoryResponse[]>(`/tickets/${ticketId}/history`);
 }

@@ -23,3 +23,13 @@ export function resolveCategoryName(categories: CategoryResponse[], categoryId: 
 export function shortId(id: string): string {
   return id.slice(0, 8);
 }
+
+/** Mesma limitação de getAssigneeLabel — usado nos campos "Solicitante"/"Agente" dos detalhes. */
+export function getRequesterLabel(createdByUserId: string, currentUserId: string | undefined): string {
+  return createdByUserId === currentUserId ? 'Você' : 'Outro usuário';
+}
+
+export function getAgentLabel(assignedAgentId: string | null, currentUserId: string | undefined): string {
+  if (!assignedAgentId) return 'Não atribuído';
+  return assignedAgentId === currentUserId ? 'Você' : 'Outro usuário';
+}
