@@ -48,6 +48,31 @@ describe('proteção de rota e sessão', () => {
     expect(localStorage.getItem('helpdesk.accessToken')).toBeNull();
   });
 
+  it('preserva o token quando /me falha por erro de rede (não trata como deslogado)', async () => {
+    seedValidSession();
+    server.use(http.get('/api/auth/me', () => HttpResponse.error()));
+
+    renderApp(['/']);
+
+    expect(await screen.findByText(/Não foi possível validar sua sessão/)).toBeInTheDocument();
+    expect(localStorage.getItem('helpdesk.accessToken')).toBe('fake-jwt-token');
+  });
+
+  it('restaura a sessão ao tentar novamente após a rede voltar', async () => {
+    seedValidSession();
+    server.use(http.get('/api/auth/me', () => HttpResponse.error()));
+
+    const user = userEvent.setup();
+    renderApp(['/']);
+    await screen.findByText(/Não foi possível validar sua sessão/);
+
+    server.use(http.get('/api/auth/me', () => HttpResponse.json(AUTH_USER)));
+    await user.click(screen.getByRole('button', { name: 'Tentar novamente' }));
+
+    expect(await screen.findByText('Bem-vindo(a) de volta.')).toBeInTheDocument();
+    expect(localStorage.getItem('helpdesk.accessToken')).toBe('fake-jwt-token');
+  });
+
   it('encerra a sessão automaticamente quando uma chamada autenticada recebe 401', async () => {
     seedValidSession();
     renderApp(['/']);

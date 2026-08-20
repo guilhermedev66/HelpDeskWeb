@@ -6,6 +6,7 @@ import { Button } from '../../components/Button/Button';
 import { Input } from '../../components/Input/Input';
 import { useToast } from '../../components/Toast/useToast';
 import { ApiError, NetworkError } from '../../lib/httpClient';
+import { safeRedirectPath } from '../../lib/safeRedirect';
 import { useAuth } from './useAuth';
 import { loginSchema, type LoginFormValues } from './schema';
 import styles from './LoginPage.module.css';
@@ -24,7 +25,7 @@ export function LoginPage() {
   } = useForm<LoginFormValues>({ resolver: zodResolver(loginSchema) });
 
   if (status === 'authenticated') {
-    const redirectTo = new URLSearchParams(location.search).get('redirect') ?? '/';
+    const redirectTo = safeRedirectPath(new URLSearchParams(location.search).get('redirect'));
     return <Navigate to={redirectTo} replace />;
   }
 
@@ -32,7 +33,7 @@ export function LoginPage() {
     setFormError(null);
     try {
       await login(values.email, values.password);
-      const redirectTo = new URLSearchParams(location.search).get('redirect') ?? '/';
+      const redirectTo = safeRedirectPath(new URLSearchParams(location.search).get('redirect'));
       navigate(redirectTo, { replace: true });
     } catch (error) {
       if (error instanceof ApiError) {
