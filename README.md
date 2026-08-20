@@ -259,9 +259,14 @@ npm run test:watch             # vitest watch
 npm run preview                 # serve o build de produção localmente
 ```
 
+## Deploy na Vercel
+
+O arquivo `vercel.json` redireciona rotas da SPA para `index.html`, preservando o acesso direto a URLs como `/tickets` e `/admin/categories`. Configure `VITE_API_BASE_URL` nos ambientes Production e Preview com a URL pública HTTPS da API seguida de `/api` e faça um novo deploy sempre que esse valor mudar.
+
+> A API de demonstração utiliza infraestrutura gratuita. Após um período sem uso, a primeira requisição pode levar mais tempo enquanto o serviço sai da hibernação.
+
 ## Sugestões futuras (fora do MVP)
 
-- CORS no back-end para permitir front e back em domínios de produção separados sem proxy.
 - Endpoint de diretório de usuários/agentes, para resolver nomes reais em vez de "Outro
   usuário"/"Não atribuído".
 - Endpoint para provisionar/promover Agent/Admin (hoje só é possível via acesso direto ao
