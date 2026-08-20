@@ -1,7 +1,13 @@
 # Help Desk — Front-end
 
+[![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=111)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-6-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Vercel](https://img.shields.io/badge/Vercel-Hobby-000?logo=vercel)](https://vercel.com/)
+
+**Demo:** [helpdesk-web-omega.vercel.app](https://helpdesk-web-omega.vercel.app) · **API:** [guilhermedev66/HelpDeskAPI](https://github.com/guilhermedev66/HelpDeskAPI)
+
 Front-end do sistema de gestão de chamados Help Desk: portfólio de um desenvolvedor .NET
-mostrando também competência de front-end. Consome a [Help Desk API](../HelpDeskAPI)
+mostrando também competência de front-end. Consome a [Help Desk API](https://github.com/guilhermedev66/HelpDeskAPI)
 (ASP.NET Core) real — nada aqui é mockado em produção; os mocks (MSW) existem só nos testes.
 
 Design em Figma: [Help Desk — Design System & Screens](https://www.figma.com/design/qDZMrrRcWOWinTcITyu6mL/Help-Desk-%E2%80%94-Design-System-%26-Screens).
@@ -58,16 +64,11 @@ Abre em `http://localhost:5173`.
 
 Nunca commite `.env` — só `.env.example` (valores fictícios) vai para o Git.
 
-### Por que proxy em vez de CORS
+### Proxy local e CORS em produção
 
-O back-end atual (`C:\dev\HelpDeskAPI`) não tem `AddCors`/`UseCors` configurado — é uma
-divergência de contrato real, documentada e não corrigida aqui porque alterar o back-end
-está fora do escopo deste projeto. Como front e back rodam em origens diferentes em dev, uma
-chamada direta do navegador para `http://localhost:8080` seria bloqueada no preflight. Em
-vez de mexer no back-end, o Vite faz proxy de `/api` para a API (`vite.config.ts`), então o
-navegador só enxerga uma origem. **Para produção** (front e back publicados em
-domínios/subdomínios diferentes), a API vai precisar de CORS configurado — mudança de
-back-end fora do escopo deste projeto, registrada aqui para quando chegar a hora.
+Em desenvolvimento, o Vite encaminha `/api` para a API local e evita configuração extra no
+navegador. Em produção, `VITE_API_BASE_URL` aponta diretamente para a API HTTPS no Render,
+que permite por CORS somente a origem pública da Vercel configurada em variável de ambiente.
 
 ## Autenticação e estratégia do JWT
 
@@ -185,8 +186,8 @@ futuro.
   (`src/features/tickets/presentation.ts`).
 - **Categoria de chamado desativada**: `GET /api/categories` só retorna categorias ativas.
   Um chamado ligado a uma categoria desativada mostra "—" em vez de um nome adivinhado.
-- **Sem CORS no back-end**: contornado via proxy do Vite em dev (ver acima); produção exige
-  configurar CORS no back-end.
+- **CORS restrito em produção**: a API permite somente as origens configuradas; previews da
+  Vercel não são liberados automaticamente.
 - **Agent/Admin não são autoprovisionáveis**: `POST /api/auth/register` sempre atribui a
   role `User` — não há endpoint para se autopromover. Os fluxos de Agent/Admin foram
   validados com MSW (`WorkflowActions.test.tsx`, `CategoriesAdminPage.test.tsx`), não contra
@@ -264,6 +265,8 @@ npm run preview                 # serve o build de produção localmente
 O arquivo `vercel.json` redireciona rotas da SPA para `index.html`, preservando o acesso direto a URLs como `/tickets` e `/admin/categories`. Configure `VITE_API_BASE_URL` nos ambientes Production e Preview com a URL pública HTTPS da API seguida de `/api` e faça um novo deploy sempre que esse valor mudar.
 
 > A API de demonstração utiliza infraestrutura gratuita. Após um período sem uso, a primeira requisição pode levar mais tempo enquanto o serviço sai da hibernação.
+
+Produção: https://helpdesk-web-omega.vercel.app
 
 ## Sugestões futuras (fora do MVP)
 
