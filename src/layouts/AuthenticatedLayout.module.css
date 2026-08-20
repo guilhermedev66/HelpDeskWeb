@@ -1,0 +1,187 @@
+.shell {
+  min-height: 100vh;
+  display: flex;
+}
+
+/* ---------- Sidebar completa (desktop, >=1024px) ---------- */
+.sidebarFull {
+  display: none;
+  flex-direction: column;
+  gap: var(--spacing-2xs);
+  width: 220px;
+  flex-shrink: 0;
+  padding: var(--spacing-lg) var(--spacing-md) var(--spacing-md);
+  background: var(--bg-surface);
+  border-right: 1px solid var(--border-subtle);
+}
+
+.brand {
+  font-size: 16px;
+  font-weight: var(--type-h2-weight);
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-md);
+}
+
+/* ---------- Rail (tablet, 768–1023px) ---------- */
+.sidebarRail {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-sm);
+  width: 64px;
+  flex-shrink: 0;
+  padding-top: var(--spacing-lg);
+  background: var(--bg-surface);
+  border-right: 1px solid var(--border-subtle);
+}
+
+.railBrandDot {
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-full);
+  background: var(--accent-default);
+  margin-bottom: var(--spacing-sm);
+}
+
+/* ---------- Main column ---------- */
+.main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.pageTitle {
+  font-size: var(--type-h3-size);
+  font-weight: var(--type-h2-weight);
+  color: var(--text-primary);
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-full);
+  background: var(--bg-inverse);
+  flex-shrink: 0;
+}
+
+.userText {
+  display: none;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.userName {
+  font-size: var(--type-body-sm-size);
+  font-weight: var(--type-body-medium-weight);
+  color: var(--text-primary);
+}
+
+.userRole {
+  font-size: 11px;
+  color: var(--text-tertiary);
+}
+
+.logoutButton {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: var(--type-body-sm-size);
+  color: var(--text-link);
+}
+
+.content {
+  flex: 1;
+  padding: var(--spacing-md);
+}
+
+/* ---------- Bottom nav (mobile, <768px) ---------- */
+.bottomNav {
+  display: flex;
+  justify-content: space-around;
+  padding: var(--spacing-xs) var(--spacing-md);
+  background: var(--bg-surface);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.bottomNavItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  color: var(--text-tertiary);
+  text-decoration: none;
+  font-size: var(--type-caption-size);
+  padding: var(--spacing-2xs);
+}
+
+.bottomNavItem[aria-current='page'] {
+  color: var(--accent-default);
+}
+
+.bottomNavDot {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-full);
+  background: currentColor;
+}
+
+/* ---------- Breakpoints ---------- */
+@media (min-width: 768px) {
+  .userText {
+    display: flex;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023.98px) {
+  .sidebarRail {
+    display: flex;
+  }
+
+  .content {
+    padding: var(--spacing-lg);
+  }
+}
+
+@media (min-width: 1024px) {
+  .sidebarFull {
+    display: flex;
+  }
+
+  .topbar {
+    padding: var(--spacing-md) var(--spacing-xl);
+  }
+
+  .content {
+    padding: var(--spacing-xl);
+  }
+}
+
+@media (max-width: 767.98px) {
+  .bottomNav {
+    position: sticky;
+    bottom: 0;
+  }
+}
+
+@media (min-width: 768px) {
+  .bottomNav {
+    display: none;
+  }
+}

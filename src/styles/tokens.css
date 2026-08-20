@@ -1,0 +1,149 @@
+/**
+ * Design tokens — traduzidos 1:1 das variáveis do Figma
+ * (Help Desk — Design System & Screens, página Foundations).
+ * Os nomes das custom properties usam o mesmo "code syntax" configurado
+ * em cada variável no Figma, então o nome aqui bate com o nome lá.
+ */
+:root {
+  /* Background */
+  --bg-page: #fafafb;
+  --bg-surface: #ffffff;
+  --bg-surface-raised: #ffffff;
+  --bg-sunken: #f4f5f7;
+  --bg-hover: #f4f5f7;
+  --bg-selected: #e0e8f8;
+  --bg-inverse: #111827;
+
+  /* Text */
+  --text-primary: #111827;
+  --text-secondary: #4b5563;
+  --text-tertiary: #6b7280;
+  --text-inverse: #ffffff;
+  --text-link: #1f4aa8;
+  --text-on-accent: #ffffff;
+
+  /* Border */
+  --border-default: #d1d5db;
+  --border-subtle: #e7e9ed;
+  --border-strong: #9ca3af;
+  --border-focus: #2b5cc4;
+
+  /* Accent */
+  --accent-default: #2b5cc4;
+  --accent-hover: #1f4aa8;
+  --accent-subtle: #e0e8f8;
+
+  /* Feedback */
+  --danger-default: #b32d2d;
+  --danger-hover: #992020;
+  --danger-subtle: #f9dada;
+  --success-default: #1f8a5c;
+  --success-subtle: #d9f2e7;
+
+  /* Status do chamado */
+  --status-open: #1f4aa8;
+  --status-open-bg: #e0e8f8;
+  --status-in-progress: #654ac4;
+  --status-in-progress-bg: #e6e0f8;
+  --status-waiting: #b47814;
+  --status-waiting-bg: #faebcd;
+  --status-resolved: #1f8a5c;
+  --status-resolved-bg: #d9f2e7;
+  --status-closed: #4b5563;
+  --status-closed-bg: #e7e9ed;
+
+  /* Prioridade */
+  --priority-low: #4b5563;
+  --priority-low-bg: #f4f5f7;
+  --priority-medium: #1f4aa8;
+  --priority-medium-bg: #e0e8f8;
+  --priority-high: #bf5c24;
+  --priority-high-bg: #fae3d3;
+  --priority-critical: #b32d2d;
+  --priority-critical-bg: #f9dada;
+
+  /* SLA */
+  --sla-ok: #1f8a5c;
+  --sla-at-risk: #b47814;
+  --sla-breached: #b32d2d;
+
+  /* Radius */
+  --radius-none: 0px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+  --radius-full: 999px;
+
+  /* Spacing */
+  --spacing-2xs: 4px;
+  --spacing-xs: 8px;
+  --spacing-sm: 12px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-2xl: 48px;
+  --spacing-3xl: 64px;
+
+  /* Elevação */
+  --elevation-overlay: 0px 4px 12px -2px rgba(15, 20, 31, 0.16);
+  --elevation-focus-ring: 0 0 0 3px rgba(43, 92, 196, 0.35);
+
+  /* Tipografia — Inter */
+  --font-family-base: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --type-display-size: 28px;
+  --type-display-line-height: 36px;
+  --type-display-weight: 600;
+
+  --type-h1-size: 22px;
+  --type-h1-line-height: 28px;
+  --type-h1-weight: 600;
+
+  --type-h2-size: 18px;
+  --type-h2-line-height: 24px;
+  --type-h2-weight: 600;
+
+  --type-h3-size: 16px;
+  --type-h3-line-height: 22px;
+  --type-h3-weight: 500;
+
+  --type-body-lg-size: 15px;
+  --type-body-lg-line-height: 22px;
+  --type-body-lg-weight: 400;
+
+  --type-body-size: 14px;
+  --type-body-line-height: 20px;
+  --type-body-weight: 400;
+
+  --type-body-medium-size: 14px;
+  --type-body-medium-line-height: 20px;
+  --type-body-medium-weight: 500;
+
+  --type-body-sm-size: 13px;
+  --type-body-sm-line-height: 18px;
+  --type-body-sm-weight: 400;
+
+  --type-label-size: 12px;
+  --type-label-line-height: 16px;
+  --type-label-weight: 500;
+
+  --type-caption-size: 12px;
+  --type-caption-line-height: 16px;
+  --type-caption-weight: 400;
+
+  /* Breakpoints (referência para uso em media queries) */
+  --breakpoint-tablet: 768px;
+  --breakpoint-desktop: 1024px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-duration: 0ms;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :root {
+    --motion-duration: 150ms;
+  }
+}
