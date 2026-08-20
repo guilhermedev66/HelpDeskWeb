@@ -32,7 +32,8 @@
   padding: var(--spacing-md);
   background: var(--bg-surface);
   border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--elevation-card);
 }
 
 .createField {
@@ -43,7 +44,8 @@
 .table {
   background: var(--bg-surface);
   border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--elevation-card);
   overflow: hidden;
 }
 

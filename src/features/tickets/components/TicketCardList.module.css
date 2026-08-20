@@ -15,9 +15,15 @@
   padding: var(--spacing-sm) var(--spacing-md);
   background: var(--bg-surface);
   border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--elevation-card);
   text-decoration: none;
   color: inherit;
+  transition: box-shadow var(--motion-duration, 150ms) ease;
+}
+
+.card:hover {
+  box-shadow: var(--elevation-card-hover);
 }
 
 .card:focus-visible {

@@ -31,11 +31,17 @@
   border-right: 1px solid var(--border-subtle);
 }
 
+.brandRow {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  margin-bottom: var(--spacing-md);
+}
+
 .brand {
   font-size: 16px;
   font-weight: var(--type-h2-weight);
   color: var(--text-primary);
-  margin-bottom: var(--spacing-md);
 }
 
 /* ---------- Rail (tablet, 768–1023px) ---------- */
@@ -51,11 +57,7 @@
   border-right: 1px solid var(--border-subtle);
 }
 
-.railBrandDot {
-  width: 24px;
-  height: 24px;
-  border-radius: var(--radius-full);
-  background: var(--accent-default);
+.railBrandMark {
   margin-bottom: var(--spacing-sm);
 }
 
@@ -90,10 +92,16 @@
 }
 
 .avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 28px;
   height: 28px;
   border-radius: var(--radius-full);
-  background: var(--bg-inverse);
+  background: var(--accent-subtle);
+  color: var(--accent-hover);
+  font-size: 11px;
+  font-weight: var(--type-body-medium-weight);
   flex-shrink: 0;
 }
 

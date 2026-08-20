@@ -1,6 +1,7 @@
 import type { RouteObject } from 'react-router-dom';
 import { Navigate } from 'react-router-dom';
 import { CategoriesAdminPage } from '../features/categories/CategoriesAdminPage';
+import { DashboardPage } from '../features/dashboard/DashboardPage';
 import { LoginPage } from '../features/auth/LoginPage';
 import { RegisterPage } from '../features/auth/RegisterPage';
 import { NewTicketPage } from '../features/tickets/NewTicketPage';
@@ -20,6 +21,7 @@ export const routes: RouteObject[] = [
         element: <AuthenticatedLayout />,
         children: [
           { index: true, element: <Navigate to="/tickets" replace /> },
+          { path: 'dashboard', element: <DashboardPage /> },
           { path: 'tickets', element: <TicketsListPage /> },
           { path: 'tickets/new', element: <NewTicketPage /> },
           { path: 'tickets/:ticketId', element: <TicketDetailsPage /> },

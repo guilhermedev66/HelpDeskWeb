@@ -8,6 +8,9 @@
   color: var(--text-secondary);
   font-size: var(--type-body-size);
   text-decoration: none;
+  transition:
+    background var(--motion-duration, 150ms) ease,
+    color var(--motion-duration, 150ms) ease;
 }
 
 .item:hover {

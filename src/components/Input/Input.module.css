@@ -42,6 +42,44 @@
   color: var(--text-tertiary);
 }
 
+.control {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.hasLeadingIcon {
+  padding-left: 34px;
+}
+
+.input:focus-visible.hasLeadingIcon {
+  padding-left: 33px;
+}
+
+.hasTrailingAction {
+  padding-right: 40px;
+}
+
+.input:focus-visible.hasTrailingAction {
+  padding-right: 39px;
+}
+
+.leadingIcon {
+  position: absolute;
+  left: var(--spacing-sm);
+  display: flex;
+  align-items: center;
+  color: var(--text-tertiary);
+  pointer-events: none;
+}
+
+.trailingAction {
+  position: absolute;
+  right: 4px;
+  display: flex;
+  align-items: center;
+}
+
 .errorMessage {
   font-size: var(--type-caption-size);
   color: var(--danger-default);

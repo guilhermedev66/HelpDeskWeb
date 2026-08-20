@@ -11,7 +11,7 @@
   --bg-surface-raised: #ffffff;
   --bg-sunken: #f4f5f7;
   --bg-hover: #f4f5f7;
-  --bg-selected: #e0e8f8;
+  --bg-selected: #e0e0fd;
   --bg-inverse: #111827;
 
   /* Text */
@@ -19,19 +19,20 @@
   --text-secondary: #4b5563;
   --text-tertiary: #6b7280;
   --text-inverse: #ffffff;
-  --text-link: #1f4aa8;
+  --text-link: #4f46e5;
   --text-on-accent: #ffffff;
 
   /* Border */
   --border-default: #d1d5db;
   --border-subtle: #e7e9ed;
   --border-strong: #9ca3af;
-  --border-focus: #2b5cc4;
+  --border-focus: #4f46e5;
 
   /* Accent */
-  --accent-default: #2b5cc4;
-  --accent-hover: #1f4aa8;
-  --accent-subtle: #e0e8f8;
+  --accent-default: #4f46e5;
+  --accent-hover: #4338ca;
+  --accent-subtle: #e0e0fd;
+  --brand-violet: #7c3aed;
 
   /* Feedback */
   --danger-default: #b32d2d;
@@ -86,7 +87,9 @@
 
   /* Elevação */
   --elevation-overlay: 0px 4px 12px -2px rgba(15, 20, 31, 0.16);
-  --elevation-focus-ring: 0 0 0 3px rgba(43, 92, 196, 0.35);
+  --elevation-focus-ring: 0 0 0 3px rgba(79, 70, 229, 0.35);
+  --elevation-card: 0px 1px 2px rgba(15, 20, 31, 0.06), 0px 1px 3px rgba(15, 20, 31, 0.08);
+  --elevation-card-hover: 0px 4px 8px -2px rgba(15, 20, 31, 0.1), 0px 2px 4px rgba(15, 20, 31, 0.08);
 
   /* Tipografia — Inter */
   --font-family-base: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;

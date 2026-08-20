@@ -1,10 +1,73 @@
 .page {
   min-height: 100vh;
   display: flex;
+  flex-direction: column;
+  background: var(--bg-page);
+}
+
+/* ---------- Painel institucional (hero) — oculto abaixo de 1024px ---------- */
+.hero {
+  display: none;
+}
+
+.heroContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+  max-width: 380px;
+}
+
+.heroBrand {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.heroBrandText {
+  font-size: var(--type-h2-size);
+  font-weight: var(--type-h2-weight);
+  color: var(--text-inverse);
+}
+
+.heroTagline {
+  font-size: 26px;
+  line-height: 34px;
+  font-weight: var(--type-display-weight);
+  color: var(--text-inverse);
+}
+
+.heroBullets {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.heroBullets li {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font-size: var(--type-body-size);
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.heroBulletDot {
+  flex-shrink: 0;
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.6);
+}
+
+/* ---------- Card de autenticação ---------- */
+.cardWrap {
+  flex: 1;
+  display: flex;
   align-items: center;
   justify-content: center;
   padding: var(--spacing-md);
-  background: var(--bg-page);
 }
 
 .card {
@@ -16,7 +79,8 @@
   padding: var(--spacing-xl) var(--spacing-lg);
   background: var(--bg-surface);
   border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--elevation-card);
 }
 
 .heading {
@@ -26,8 +90,8 @@
 }
 
 .title {
-  font-size: 20px;
-  font-weight: var(--type-h2-weight);
+  font-size: 22px;
+  font-weight: var(--type-h1-weight);
   color: var(--text-primary);
 }
 
@@ -50,8 +114,41 @@
   padding: var(--spacing-xs) var(--spacing-sm);
 }
 
+.togglePassword {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  background: none;
+  border: none;
+  border-radius: var(--radius-sm);
+  color: var(--text-tertiary);
+  cursor: pointer;
+  transition:
+    color var(--motion-duration, 150ms) ease,
+    background var(--motion-duration, 150ms) ease;
+}
+
+.togglePassword:hover {
+  color: var(--text-secondary);
+  background: var(--bg-hover);
+}
+
+.togglePassword:focus-visible {
+  outline: none;
+  box-shadow: var(--elevation-focus-ring);
+}
+
 .submit {
   width: 100%;
+}
+
+.coldStart {
+  font-size: var(--type-caption-size);
+  color: var(--text-tertiary);
+  text-align: center;
 }
 
 .footer {
@@ -61,4 +158,33 @@
 
 .footer a {
   color: var(--text-link);
+  transition: color var(--motion-duration, 150ms) ease;
+}
+
+.footer a:hover {
+  color: var(--accent-hover);
+}
+
+/* ---------- Breakpoint desktop: divide em duas colunas ---------- */
+@media (min-width: 1024px) {
+  .page {
+    flex-direction: row;
+  }
+
+  .hero {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    padding: var(--spacing-3xl);
+    background: linear-gradient(135deg, var(--accent-default) 0%, var(--brand-violet) 100%);
+  }
+
+  .cardWrap {
+    flex: 1;
+    max-width: 640px;
+  }
+
+  .card {
+    box-shadow: var(--elevation-card-hover);
+  }
 }

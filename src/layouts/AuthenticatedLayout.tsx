@@ -1,8 +1,17 @@
 import { useEffect, useRef } from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
+import { BrandMark } from '../components/BrandMark/BrandMark';
 import { NavItem } from '../components/NavItem/NavItem';
 import { useAuth } from '../features/auth/useAuth';
 import styles from './AuthenticatedLayout.module.css';
+
+function initialsFor(name: string | undefined): string {
+  if (!name) return '';
+  const parts = name.trim().split(/\s+/);
+  const first = parts[0]?.[0] ?? '';
+  const last = parts.length > 1 ? (parts[parts.length - 1]?.[0] ?? '') : '';
+  return (first + last).toUpperCase();
+}
 
 interface NavLinkConfig {
   to: string;
@@ -13,7 +22,10 @@ interface NavLinkConfig {
 // Chamados vale pra todo mundo (User acompanha os próprios, Agent/Admin veem a fila).
 // Categorias é exclusivo de Admin — reflete a autorização real da API (ver RequireRole).
 function navLinksForRoles(roles: string[] | undefined): NavLinkConfig[] {
-  const links: NavLinkConfig[] = [{ to: '/tickets', label: 'Chamados', end: false }];
+  const links: NavLinkConfig[] = [
+    { to: '/dashboard', label: 'Dashboard', end: true },
+    { to: '/tickets', label: 'Chamados', end: false },
+  ];
   if (roles?.includes('Admin')) {
     links.push({ to: '/admin/categories', label: 'Categorias', end: false });
   }
@@ -24,7 +36,11 @@ export function AuthenticatedLayout() {
   const { user, logout } = useAuth();
   const location = useLocation();
   const navLinks = navLinksForRoles(user?.roles);
-  const pageTitle = location.pathname.startsWith('/admin/categories') ? 'Categorias' : 'Chamados';
+  const pageTitle = location.pathname.startsWith('/admin/categories')
+    ? 'Categorias'
+    : location.pathname.startsWith('/dashboard')
+      ? 'Dashboard'
+      : 'Chamados';
   const mainRef = useRef<HTMLElement>(null);
 
   // SPA: trocar de rota não move o foco sozinho (diferente de navegação de página inteira).
@@ -40,14 +56,17 @@ export function AuthenticatedLayout() {
       </a>
 
       <nav className={styles.sidebarFull} aria-label="Navegação principal">
-        <span className={styles.brand}>Help Desk</span>
+        <span className={styles.brandRow}>
+          <BrandMark size={26} />
+          <span className={styles.brand}>Help Desk</span>
+        </span>
         {navLinks.map((link) => (
           <NavItem key={link.to} to={link.to} label={link.label} end={link.end} />
         ))}
       </nav>
 
       <nav className={styles.sidebarRail} aria-label="Navegação principal">
-        <span className={styles.railBrandDot} aria-hidden="true" />
+        <BrandMark size={26} className={styles.railBrandMark} label="Help Desk" />
         {navLinks.map((link) => (
           <NavItem key={link.to} to={link.to} label={link.label} end={link.end} variant="rail" />
         ))}
@@ -57,7 +76,9 @@ export function AuthenticatedLayout() {
         <header className={styles.topbar}>
           <span className={styles.pageTitle}>{pageTitle}</span>
           <div className={styles.userInfo}>
-            <span className={styles.avatar} aria-hidden="true" />
+            <span className={styles.avatar} aria-hidden="true">
+              {initialsFor(user?.displayName)}
+            </span>
             <span className={styles.userText}>
               <span className={styles.userName}>{user?.displayName}</span>
               <span className={styles.userRole}>{user?.roles[0]}</span>

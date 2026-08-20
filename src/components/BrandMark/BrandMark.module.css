@@ -1,0 +1,4 @@
+.mark {
+  flex-shrink: 0;
+  border-radius: var(--radius-md);
+}
