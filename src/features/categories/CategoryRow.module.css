@@ -1,13 +1,14 @@
 .row {
   display: flex;
   align-items: center;
-  gap: var(--spacing-md);
+  flex-wrap: wrap;
+  gap: var(--spacing-xs) var(--spacing-md);
   padding: var(--spacing-sm) var(--spacing-md);
   border-top: 1px solid var(--border-subtle);
 }
 
 .name {
-  flex: 1 1 auto;
+  flex: 1 1 140px;
   min-width: 0;
   font-size: var(--type-body-size);
   font-weight: var(--type-body-medium-weight);
@@ -15,7 +16,7 @@
 }
 
 .renameInput {
-  flex: 1 1 auto;
+  flex: 1 1 140px;
   min-width: 0;
   padding: 6px var(--spacing-sm);
   border: 1px solid var(--border-focus);
@@ -44,10 +45,18 @@
   color: var(--text-tertiary);
 }
 
+/* "Criada em" é secundário — sai em telas estreitas pra não estourar a linha (name + badge + ações já preenchem 320px). */
 .date {
-  flex: 0 0 110px;
+  display: none;
   font-size: var(--type-body-sm-size);
   color: var(--text-secondary);
+}
+
+@media (min-width: 640px) {
+  .date {
+    display: block;
+    flex: 0 0 110px;
+  }
 }
 
 .actions {

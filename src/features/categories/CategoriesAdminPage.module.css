@@ -27,6 +27,7 @@
 .createForm {
   display: flex;
   align-items: flex-start;
+  flex-wrap: wrap;
   gap: var(--spacing-sm);
   padding: var(--spacing-md);
   background: var(--bg-surface);
@@ -35,7 +36,8 @@
 }
 
 .createField {
-  flex: 1 1 auto;
+  flex: 1 1 200px;
+  min-width: 0;
 }
 
 .table {
@@ -63,7 +65,14 @@
   flex: 0 0 90px;
 }
 .colDate {
+  display: none;
   flex: 0 0 110px;
+}
+
+@media (min-width: 640px) {
+  .colDate {
+    display: block;
+  }
 }
 .colActions {
   flex: 0 0 120px;
