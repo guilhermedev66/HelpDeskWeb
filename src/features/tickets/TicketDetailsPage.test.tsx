@@ -60,6 +60,33 @@ describe('TicketDetailsPage', () => {
     expect(await screen.findByText('Já verifiquei o driver.')).toBeInTheDocument();
   });
 
+  it('desabilita o botão de comentar durante o envio (proteção contra envio duplo)', async () => {
+    seedValidSession();
+    server.use(
+      http.post('/api/tickets/:ticketId/comments', async () => {
+        await new Promise((resolve) => setTimeout(resolve, 60));
+        return HttpResponse.json(
+          {
+            id: 'slow-comment',
+            authorUserId: AUTH_USER.id,
+            authorDisplayName: AUTH_USER.displayName,
+            body: 'Comentário lento',
+            createdAt: new Date().toISOString(),
+          },
+          { status: 201 },
+        );
+      }),
+    );
+
+    const user = userEvent.setup();
+    renderApp([`/tickets/${ASSIGNED_TICKET_ID}`]);
+
+    await user.type(await screen.findByLabelText('Comentário'), 'Comentário lento');
+    await user.click(screen.getByRole('button', { name: 'Comentar' }));
+
+    expect(screen.getByRole('button', { name: 'Comentar' })).toBeDisabled();
+  });
+
   it('não permite comentar quando o agente não está atribuído ao chamado', async () => {
     seedValidSession();
     renderApp([`/tickets/${UNASSIGNED_TICKET_ID}`]);

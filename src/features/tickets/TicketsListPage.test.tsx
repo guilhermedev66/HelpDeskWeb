@@ -19,6 +19,25 @@ async function findTicketList() {
 }
 
 describe('TicketsListPage', () => {
+  it('mostra skeleton enquanto a lista carrega, sem conteúdo nem erro prematuro', async () => {
+    server.use(
+      http.get('/api/tickets', async () => {
+        await new Promise((resolve) => setTimeout(resolve, 80));
+        return HttpResponse.json({ items: [], page: 1, pageSize: 20, totalItems: 0, totalPages: 0 });
+      }),
+    );
+    seedValidSession();
+    renderApp(['/tickets']);
+
+    await screen.findByRole('heading', { name: /chamados/i });
+    expect(screen.queryByText('Nenhum chamado encontrado')).not.toBeInTheDocument();
+    expect(screen.queryByRole('list', { name: 'Chamados' })).not.toBeInTheDocument();
+
+    await waitFor(() => {
+      expect(screen.getByText('Nenhum chamado encontrado')).toBeInTheDocument();
+    });
+  });
+
   it('carrega e mostra os chamados retornados pela API', async () => {
     seedValidSession();
     renderApp(['/tickets']);
