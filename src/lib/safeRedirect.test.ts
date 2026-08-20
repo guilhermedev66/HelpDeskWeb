@@ -23,4 +23,9 @@ describe('safeRedirectPath', () => {
     expect(safeRedirectPath(undefined)).toBe('/');
     expect(safeRedirectPath('')).toBe('/');
   });
+
+  it('rejeita valor malformado que não começa com "/"', () => {
+    expect(safeRedirectPath('javascript:alert(1)')).toBe('/');
+    expect(safeRedirectPath('tickets/42')).toBe('/');
+  });
 });

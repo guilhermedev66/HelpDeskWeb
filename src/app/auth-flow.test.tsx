@@ -58,6 +58,20 @@ describe('proteção de rota e sessão', () => {
     expect(localStorage.getItem('helpdesk.accessToken')).toBe('fake-jwt-token');
   });
 
+  it('preserva o token quando /me responde 5xx', async () => {
+    seedValidSession();
+    server.use(
+      http.get('/api/auth/me', () =>
+        HttpResponse.json({ status: 500, title: 'Internal Server Error' }, { status: 500 }),
+      ),
+    );
+
+    renderApp(['/']);
+
+    expect(await screen.findByText(/Não foi possível validar sua sessão/)).toBeInTheDocument();
+    expect(localStorage.getItem('helpdesk.accessToken')).toBe('fake-jwt-token');
+  });
+
   it('restaura a sessão ao tentar novamente após a rede voltar', async () => {
     seedValidSession();
     server.use(http.get('/api/auth/me', () => HttpResponse.error()));
