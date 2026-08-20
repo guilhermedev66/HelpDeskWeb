@@ -1,6 +1,7 @@
 import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 import type {
+  CategoryDetailsResponse,
   CategoryResponse,
   TicketCommentResponse,
   TicketDetailsResponse,
@@ -137,6 +138,43 @@ export const HISTORY_FIXTURES: TicketHistoryResponse[] = [
     newValue: 'Open',
   },
 ];
+
+const CATEGORY_DETAILS_FIXTURES: CategoryDetailsResponse[] = [
+  {
+    id: CATEGORY_FIXTURES[0].id,
+    name: CATEGORY_FIXTURES[0].name,
+    isActive: true,
+    createdAt: '2026-01-02T09:00:00.000Z',
+  },
+  {
+    id: CATEGORY_FIXTURES[1].id,
+    name: CATEGORY_FIXTURES[1].name,
+    isActive: true,
+    createdAt: '2026-01-02T09:00:00.000Z',
+  },
+  {
+    id: CATEGORY_FIXTURES[2].id,
+    name: CATEGORY_FIXTURES[2].name,
+    isActive: true,
+    createdAt: '2026-01-02T09:00:00.000Z',
+  },
+  {
+    id: 'aaaaaaaa-0000-0000-0000-000000000004',
+    name: 'Impressoras (legado)',
+    isActive: false,
+    createdAt: '2026-01-02T09:00:00.000Z',
+  },
+];
+
+function buildCategoryDetailsFixtures(): Map<string, CategoryDetailsResponse> {
+  return new Map(CATEGORY_DETAILS_FIXTURES.map((category) => [category.id, category]));
+}
+
+let CATEGORY_DETAILS_BY_ID = buildCategoryDetailsFixtures();
+
+export function resetCategoryFixtures(): void {
+  CATEGORY_DETAILS_BY_ID = buildCategoryDetailsFixtures();
+}
 
 function paginatedTicketsHandler(request: Request) {
   const url = new URL(request.url);
@@ -312,6 +350,56 @@ export const handlers = [
     }
     const updated = { ...ticket, priority: body.priority, version: ticket.version + 1 };
     TICKET_DETAILS_BY_ID.set(updated.id, updated);
+    return HttpResponse.json(updated);
+  }),
+
+  http.get('/api/categories/all', () => HttpResponse.json([...CATEGORY_DETAILS_BY_ID.values()])),
+
+  http.post('/api/categories', async ({ request }) => {
+    const body = (await request.json()) as { name: string };
+    const normalized = body.name.trim().toUpperCase();
+    const exists = [...CATEGORY_DETAILS_BY_ID.values()].some((c) => c.name.toUpperCase() === normalized);
+    if (exists) {
+      return HttpResponse.json(
+        { status: 409, title: 'Resource conflict.', detail: 'A category with this name already exists.' },
+        { status: 409 },
+      );
+    }
+    const created: CategoryDetailsResponse = {
+      id: `cat-${Date.now()}`,
+      name: body.name.trim(),
+      isActive: true,
+      createdAt: new Date().toISOString(),
+    };
+    CATEGORY_DETAILS_BY_ID.set(created.id, created);
+    return HttpResponse.json(created, { status: 201 });
+  }),
+
+  http.patch('/api/categories/:categoryId', async ({ params, request }) => {
+    const category = CATEGORY_DETAILS_BY_ID.get(params.categoryId as string);
+    if (!category) return HttpResponse.json({ status: 404, title: 'Resource not found.' }, { status: 404 });
+    const body = (await request.json()) as { name: string };
+    const normalized = body.name.trim().toUpperCase();
+    const conflicts = [...CATEGORY_DETAILS_BY_ID.values()].some(
+      (c) => c.id !== category.id && c.name.toUpperCase() === normalized,
+    );
+    if (conflicts) {
+      return HttpResponse.json(
+        { status: 409, title: 'Resource conflict.', detail: 'A category with this name already exists.' },
+        { status: 409 },
+      );
+    }
+    const updated = { ...category, name: body.name.trim() };
+    CATEGORY_DETAILS_BY_ID.set(updated.id, updated);
+    return HttpResponse.json(updated);
+  }),
+
+  http.patch('/api/categories/:categoryId/status', async ({ params, request }) => {
+    const category = CATEGORY_DETAILS_BY_ID.get(params.categoryId as string);
+    if (!category) return HttpResponse.json({ status: 404, title: 'Resource not found.' }, { status: 404 });
+    const body = (await request.json()) as { isActive: boolean };
+    const updated = { ...category, isActive: body.isActive };
+    CATEGORY_DETAILS_BY_ID.set(updated.id, updated);
     return HttpResponse.json(updated);
   }),
 ];

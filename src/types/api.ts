@@ -46,6 +46,25 @@ export interface CategoryResponse {
   name: string;
 }
 
+export interface CategoryDetailsResponse {
+  id: string;
+  name: string;
+  isActive: boolean;
+  createdAt: string;
+}
+
+export interface CreateCategoryRequest {
+  name: string;
+}
+
+export interface RenameCategoryRequest {
+  name: string;
+}
+
+export interface ChangeCategoryStatusRequest {
+  isActive: boolean;
+}
+
 export interface TicketSummaryResponse {
   id: string;
   title: string;
