@@ -1,32 +1,49 @@
-import { NavLink, Outlet } from 'react-router-dom';
+import { NavLink, Outlet, useLocation } from 'react-router-dom';
 import { NavItem } from '../components/NavItem/NavItem';
 import { useAuth } from '../features/auth/useAuth';
 import styles from './AuthenticatedLayout.module.css';
 
-const NAV_LINKS = [{ to: '/tickets', label: 'Chamados', end: false }];
+interface NavLinkConfig {
+  to: string;
+  label: string;
+  end: boolean;
+}
+
+// Chamados vale pra todo mundo (User acompanha os próprios, Agent/Admin veem a fila).
+// Categorias é exclusivo de Admin — reflete a autorização real da API (ver RequireRole).
+function navLinksForRoles(roles: string[] | undefined): NavLinkConfig[] {
+  const links: NavLinkConfig[] = [{ to: '/tickets', label: 'Chamados', end: false }];
+  if (roles?.includes('Admin')) {
+    links.push({ to: '/admin/categories', label: 'Categorias', end: false });
+  }
+  return links;
+}
 
 export function AuthenticatedLayout() {
   const { user, logout } = useAuth();
+  const location = useLocation();
+  const navLinks = navLinksForRoles(user?.roles);
+  const pageTitle = location.pathname.startsWith('/admin/categories') ? 'Categorias' : 'Chamados';
 
   return (
     <div className={styles.shell}>
       <nav className={styles.sidebarFull} aria-label="Navegação principal">
         <span className={styles.brand}>Help Desk</span>
-        {NAV_LINKS.map((link) => (
+        {navLinks.map((link) => (
           <NavItem key={link.to} to={link.to} label={link.label} end={link.end} />
         ))}
       </nav>
 
       <nav className={styles.sidebarRail} aria-label="Navegação principal">
         <span className={styles.railBrandDot} aria-hidden="true" />
-        {NAV_LINKS.map((link) => (
+        {navLinks.map((link) => (
           <NavItem key={link.to} to={link.to} label={link.label} end={link.end} variant="rail" />
         ))}
       </nav>
 
       <div className={styles.main}>
         <header className={styles.topbar}>
-          <span className={styles.pageTitle}>Chamados</span>
+          <span className={styles.pageTitle}>{pageTitle}</span>
           <div className={styles.userInfo}>
             <span className={styles.avatar} aria-hidden="true" />
             <span className={styles.userText}>
@@ -44,7 +61,7 @@ export function AuthenticatedLayout() {
         </main>
 
         <nav className={styles.bottomNav} aria-label="Navegação principal">
-          {NAV_LINKS.map((link) => (
+          {navLinks.map((link) => (
             <BottomNavLink key={link.to} to={link.to} label={link.label} end={link.end} />
           ))}
         </nav>
