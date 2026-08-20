@@ -1,0 +1,60 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field label {
+  font-size: var(--type-caption-size);
+  color: var(--text-tertiary);
+}
+
+.select {
+  padding: 8px var(--spacing-sm);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  font-size: var(--type-body-sm-size);
+  color: var(--text-primary);
+}
+
+.conflictBox {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-sm);
+  background: var(--priority-high-bg);
+  border-radius: var(--radius-sm);
+  font-size: var(--type-body-sm-size);
+  color: var(--priority-high);
+}
+
+.errorMessage {
+  font-size: var(--type-body-sm-size);
+  color: var(--danger-default);
+}
+
+.confirmBox {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-sm);
+  background: var(--danger-subtle);
+  border-radius: var(--radius-sm);
+}
+
+.confirmActions {
+  display: flex;
+  gap: var(--spacing-xs);
+}
+
+.notice {
+  font-size: var(--type-body-sm-size);
+  color: var(--text-tertiary);
+}

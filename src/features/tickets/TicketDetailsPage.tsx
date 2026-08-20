@@ -8,6 +8,7 @@ import { CommentList } from './components/CommentList';
 import { HistoryTimeline } from './components/HistoryTimeline';
 import { PriorityBadge } from './components/PriorityBadge';
 import { StatusBadge } from './components/StatusBadge';
+import { WorkflowActions } from './components/WorkflowActions';
 import { formatDateTime } from './dates';
 import { getAgentLabel, getRequesterLabel, resolveCategoryName, shortId } from './presentation';
 import { getFirstResponseSlaVisual, getResolutionSlaVisual } from './sla';
@@ -149,6 +150,13 @@ export function TicketDetailsPage() {
         </div>
 
         <div className={styles.right}>
+          {isAgentOrAdmin && (
+            <section className={styles.card}>
+              <h2 className={styles.sectionTitle}>Ações do agente</h2>
+              <WorkflowActions ticket={ticket} currentUserId={user?.id} isAdmin={isAdmin} />
+            </section>
+          )}
+
           <section className={styles.card}>
             <h2 className={styles.sectionTitle}>SLA</h2>
             <div className={styles.slaRow}>

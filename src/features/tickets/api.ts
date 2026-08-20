@@ -65,3 +65,32 @@ export function addTicketComment(
 export function listTicketHistory(ticketId: string): Promise<TicketHistoryResponse[]> {
   return apiRequest<TicketHistoryResponse[]>(`/tickets/${ticketId}/history`);
 }
+
+export function assignTicketToSelf(ticketId: string, version: number): Promise<TicketDetailsResponse> {
+  return apiRequest<TicketDetailsResponse>(`/tickets/${ticketId}/assignment`, {
+    method: 'POST',
+    body: { version },
+  });
+}
+
+export function changeTicketStatus(
+  ticketId: string,
+  status: TicketStatus,
+  version: number,
+): Promise<TicketDetailsResponse> {
+  return apiRequest<TicketDetailsResponse>(`/tickets/${ticketId}/status`, {
+    method: 'PATCH',
+    body: { status, version },
+  });
+}
+
+export function changeTicketPriority(
+  ticketId: string,
+  priority: TicketPriority,
+  version: number,
+): Promise<TicketDetailsResponse> {
+  return apiRequest<TicketDetailsResponse>(`/tickets/${ticketId}/priority`, {
+    method: 'PATCH',
+    body: { priority, version },
+  });
+}

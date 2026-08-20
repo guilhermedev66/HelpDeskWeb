@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react';
+import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { http, HttpResponse } from 'msw';
 import { describe, expect, it } from 'vitest';
@@ -18,9 +18,10 @@ describe('TicketDetailsPage', () => {
     seedValidSession();
     renderApp([`/tickets/${ASSIGNED_TICKET_ID}`]);
 
-    expect(await screen.findByRole('heading', { name: TICKET_FIXTURES[0].title })).toBeInTheDocument();
-    expect(screen.getByText('Em atendimento')).toBeInTheDocument();
-    expect(screen.getByText('Alta')).toBeInTheDocument();
+    const heading = await screen.findByRole('heading', { name: TICKET_FIXTURES[0].title });
+    const headerCard = heading.closest('section') as HTMLElement;
+    expect(within(headerCard).getByText('Em atendimento')).toBeInTheDocument();
+    expect(within(headerCard).getByText('Alta')).toBeInTheDocument();
     expect(screen.getByText('Chamado criado')).toBeInTheDocument();
   });
 

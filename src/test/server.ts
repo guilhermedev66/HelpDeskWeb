@@ -18,6 +18,20 @@ export const AUTH_USER = {
   roles: ['Agent'],
 };
 
+export const ADMIN_USER = {
+  id: '33333333-3333-3333-3333-333333333333',
+  email: 'admin@helpdesk.com',
+  displayName: 'Diego Prado',
+  roles: ['Admin'],
+};
+
+export const PLAIN_USER = {
+  id: '99999999-0000-0000-0000-000000000001',
+  email: 'usuario@helpdesk.com',
+  displayName: 'Carlos Andrade',
+  roles: ['User'],
+};
+
 export const CATEGORY_FIXTURES: CategoryResponse[] = [
   { id: 'aaaaaaaa-0000-0000-0000-000000000001', name: 'Hardware' },
   { id: 'aaaaaaaa-0000-0000-0000-000000000002', name: 'Rede' },
@@ -64,20 +78,43 @@ export const TICKET_FIXTURES: TicketSummaryResponse[] = [
     resolutionDueAt: '2026-08-18T10:00:00.000Z',
     version: 2,
   },
+  {
+    id: '10000000-0000-0000-0000-000000000004',
+    title: 'Notebook não liga',
+    priority: 'Medium',
+    status: 'InProgress',
+    categoryId: CATEGORY_FIXTURES[0].id,
+    createdByUserId: PLAIN_USER.id,
+    assignedAgentId: '55555555-5555-5555-5555-555555555555', // outro agente, não o AUTH_USER
+    createdAt: '2026-08-16T10:00:00.000Z',
+    firstResponseDueAt: '2026-08-16T18:00:00.000Z',
+    resolutionDueAt: '2026-08-17T10:00:00.000Z',
+    version: 1,
+  },
 ];
 
-const TICKET_DETAILS_BY_ID = new Map<string, TicketDetailsResponse>(
-  TICKET_FIXTURES.map((ticket) => [
-    ticket.id,
-    {
-      ...ticket,
-      description: `Descrição de teste para "${ticket.title}".`,
-      firstRespondedAt: null,
-      resolvedAt: null,
-      closedAt: null,
-    },
-  ]),
-);
+function buildTicketDetailsFixtures(): Map<string, TicketDetailsResponse> {
+  return new Map(
+    TICKET_FIXTURES.map((ticket) => [
+      ticket.id,
+      {
+        ...ticket,
+        description: `Descrição de teste para "${ticket.title}".`,
+        firstRespondedAt: null,
+        resolvedAt: null,
+        closedAt: null,
+      },
+    ]),
+  );
+}
+
+// Mutável (assign/status/priority escrevem aqui) — precisa ser reconstruído entre testes.
+let TICKET_DETAILS_BY_ID = buildTicketDetailsFixtures();
+
+/** Chamado no afterEach do setup.ts — mutações de um teste não podem vazar pro próximo. */
+export function resetTicketFixtures(): void {
+  TICKET_DETAILS_BY_ID = buildTicketDetailsFixtures();
+}
 
 export const COMMENT_FIXTURES: TicketCommentResponse[] = [
   {
@@ -240,6 +277,42 @@ export const handlers = [
       return HttpResponse.json({ status: 404, title: 'Resource not found.' }, { status: 404 });
     }
     return HttpResponse.json(HISTORY_FIXTURES);
+  }),
+
+  http.post('/api/tickets/:ticketId/assignment', async ({ params, request }) => {
+    const ticket = TICKET_DETAILS_BY_ID.get(params.ticketId as string);
+    if (!ticket) return HttpResponse.json({ status: 404, title: 'Resource not found.' }, { status: 404 });
+    const body = (await request.json()) as { version: number };
+    if (body.version !== ticket.version) {
+      return HttpResponse.json({ status: 409, title: 'Conflict.' }, { status: 409 });
+    }
+    const updated = { ...ticket, assignedAgentId: AUTH_USER.id, version: ticket.version + 1 };
+    TICKET_DETAILS_BY_ID.set(updated.id, updated);
+    return HttpResponse.json(updated);
+  }),
+
+  http.patch('/api/tickets/:ticketId/status', async ({ params, request }) => {
+    const ticket = TICKET_DETAILS_BY_ID.get(params.ticketId as string);
+    if (!ticket) return HttpResponse.json({ status: 404, title: 'Resource not found.' }, { status: 404 });
+    const body = (await request.json()) as { status: TicketDetailsResponse['status']; version: number };
+    if (body.version !== ticket.version) {
+      return HttpResponse.json({ status: 409, title: 'Conflict.' }, { status: 409 });
+    }
+    const updated = { ...ticket, status: body.status, version: ticket.version + 1 };
+    TICKET_DETAILS_BY_ID.set(updated.id, updated);
+    return HttpResponse.json(updated);
+  }),
+
+  http.patch('/api/tickets/:ticketId/priority', async ({ params, request }) => {
+    const ticket = TICKET_DETAILS_BY_ID.get(params.ticketId as string);
+    if (!ticket) return HttpResponse.json({ status: 404, title: 'Resource not found.' }, { status: 404 });
+    const body = (await request.json()) as { priority: TicketDetailsResponse['priority']; version: number };
+    if (body.version !== ticket.version) {
+      return HttpResponse.json({ status: 409, title: 'Conflict.' }, { status: 409 });
+    }
+    const updated = { ...ticket, priority: body.priority, version: ticket.version + 1 };
+    TICKET_DETAILS_BY_ID.set(updated.id, updated);
+    return HttpResponse.json(updated);
   }),
 ];
 
